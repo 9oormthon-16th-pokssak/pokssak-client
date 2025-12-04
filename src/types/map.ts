@@ -27,7 +27,7 @@ export interface SpotDetailResponse {
   keyword: string;
   name: string;
   description: string;
-  location: SpotDetailLocation;
+  location: SpotLocation;
   mapLink: string;
   tip: string;
   tags: string[];
