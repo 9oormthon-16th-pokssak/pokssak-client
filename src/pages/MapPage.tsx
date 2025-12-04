@@ -5,6 +5,7 @@ import type { Spot } from "@/types/map";
 
 import KakaoMap from "@/components/KakaoMap";
 import Header from "@/components/common/Header";
+import MyLocationButton from "@/components/map/MyLocationButton";
 import PlaceBottomSheet from "@/components/map/PlaceBottomSheet";
 import RefreshButton from "@/components/map/RefreshButton";
 
@@ -165,6 +166,18 @@ export default function MapPage() {
     fetchSpots(currentBounds, true);
   };
 
+  // 현위치 버튼 클릭 핸들러: 지도 중심을 현재 위치로 이동
+  const handleMyLocationClick = () => {
+    if (!mapRef.current || !location) {
+      console.warn("지도 인스턴스가 아직 생성되지 않았거나 위치 정보가 없습니다.");
+      return;
+    }
+
+    // 지도 중심을 현재 위치로 이동
+    const moveLatLon = new kakao.maps.LatLng(location.latitude, location.longitude);
+    mapRef.current.setCenter(moveLatLon);
+  };
+
   // 초기 spots API 호출 (현재 위치 기준)
   useEffect(() => {
     // 위치 정보가 로드되지 않았거나 위치가 없으면 API 호출하지 않음
@@ -191,6 +204,11 @@ export default function MapPage() {
         height="100vh"
       />
       {showRefreshButton && <RefreshButton onClick={handleRefreshClick} />}
+
+      {/* 현위치 버튼 */}
+      <div className="fixed top-[70px] right-[10px] z-50">
+        <MyLocationButton onClick={handleMyLocationClick} />
+      </div>
 
       {selectedPlace && (
         <PlaceBottomSheet
