@@ -1,7 +1,7 @@
 import { HStack, Text, VStack } from "@vapor-ui/core";
 
 import BottomBar from "@/components/common/BottomBar";
-import UserKeywordImage from "@/components/common/UserKeywordImage";
+import UserKeywordHarubang from "@/components/common/UserKeywordHarubang";
 
 import { useAuth } from "@/hooks/useAuth";
 
@@ -16,7 +16,7 @@ const HomePage = () => {
           어디로 떠나볼까요?
         </Text>
         {user?.keyword ? (
-          <UserKeywordImage keyword={user.keyword} className="h-[120px] w-[120px]" />
+          <UserKeywordHarubang keyword={user.keyword} className="h-[120px] w-[120px]" />
         ) : null}
       </HStack>
       <BottomBar />

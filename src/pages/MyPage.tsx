@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import type { Spot } from "@/types/map";
 import { Badge, Table, Tabs, Text, VStack } from "@vapor-ui/core";
 
+import UserKeywordHarubang from "@/components/common/UserKeywordHarubang";
 import UserKeywordImage from "@/components/common/UserKeywordImage";
 import UserStats from "@/components/common/UserStats";
 
@@ -102,11 +103,7 @@ const MyPage = () => {
       <VStack>
         {/* 유저 취향 따라 이미지 변경 */}
         {user?.keyword && (
-          <UserKeywordImage
-            keyword={user.keyword}
-            className="mx-auto h-[160px] w-[160px]"
-            alt="유저 취향 아이콘"
-          />
+          <UserKeywordHarubang keyword={user.keyword} className="mx-auto h-[160px] w-[160px]" />
         )}
         {/* 유저 이름 */}
         {user?.name && (
