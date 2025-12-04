@@ -44,26 +44,31 @@ const PlaceBottomSheet = ({ isOpen, setIsOpen, selectedPlace }: Props) => {
     fetchSpotDetail();
   }, [selectedPlace.id]);
 
-  // 거리 계산 및 Status 결정 로직
-  let buttonStatus: 0 | 1 | 2 = 0; // 기본값은 타입1 (100m보다 멈)
-  const MAX_DISTANCE_M = 100; // 100 미터 임계값
+  // 버튼 상태 초기값
+  let buttonStatus: 0 | 1 | 2 | 3 = 0;
+  const MAX_DISTANCE_M = 100;
 
-  // 장소 데이터가 있고, 사용자 위치를 성공적으로 가져왔을 때만 거리 계산 진행
-  if (place && location && !isLoading) {
+  // 방문 여부 확인
+  if (place?.isVisited) {
+    // 방문 완료 상태
+    buttonStatus = 3;
+  } else if (place && location && !isLoading) {
+    // 미방문 시 거리 기반 상태
     const userLat = location.latitude;
     const userLng = location.longitude;
     const placeLat = place.location.latitude;
     const placeLng = place.location.longitude;
 
-    // 현재 위치와 장소 간의 거리 계산
+    // 현재 위치와 장소 간의 거리
     const distance = haversineDistanceMeters(userLat, userLng, placeLat, placeLng);
     console.log(distance);
+
     // 거리 판별
     if (distance <= MAX_DISTANCE_M) {
-      // 100m 이내: 타입2
+      // 100m 이내
       buttonStatus = 2;
     } else {
-      // 100m 초과: 타입1
+      // 100m 초과
       buttonStatus = 1;
     }
   }
@@ -165,7 +170,7 @@ const PlaceBottomSheet = ({ isOpen, setIsOpen, selectedPlace }: Props) => {
 
         <Sheet.Footer className={"p-0"}>
           <Box className={"px-v-150 pt-v-100 pb-v-175 w-full"}>
-            {/* 거리 계산 결과에 따라 buttonStatus 값 전달 */}
+            {/* 버튼 상태 전달 */}
             <BottomSheetButton status={buttonStatus} />
           </Box>
         </Sheet.Footer>
