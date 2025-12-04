@@ -4,3 +4,14 @@
 /* 2. Tailwind CSS 연결 */
 @import "tailwindcss/theme.css" layer(tw-theme);
 @import "tailwindcss/utilities.css" layer(tw-utilities);
+
+/* 3. 모바일 최대 너비 고정 (375px) */
+body {
+  max-width: 375px;
+  margin: 0 auto;
+}
+
+#root {
+  max-width: 375px;
+  margin: 0 auto;
+}
