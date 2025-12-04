@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Field, Flex, Select, Text } from "@vapor-ui/core";
 
 import { PREFERENCES } from "@/constants/preferences";
+import { useAuthStore } from "@/stores/authStore";
 
 const USER_STORAGE_KEY = "user";
 
@@ -12,6 +13,8 @@ interface HeaderProps {
 }
 
 const Header = ({ selectedPreference, onPreferenceChange }: HeaderProps) => {
+  const setUser = useAuthStore(state => state.setUser);
+
   // localStorage에서 user의 keyword를 가져와서 초기 label로 매핑
   const getPreferenceFromStorage = (): string | null => {
     try {
@@ -48,6 +51,24 @@ const Header = ({ selectedPreference, onPreferenceChange }: HeaderProps) => {
     const newLabel = newValue as string;
     setMappedPreference(newLabel);
     onPreferenceChange(newLabel);
+
+    // localStorage와 zustand store의 user keyword 업데이트
+    try {
+      const storedUser = localStorage.getItem(USER_STORAGE_KEY);
+      if (storedUser) {
+        const user = JSON.parse(storedUser);
+        // label을 value로 변환
+        const preference = PREFERENCES.find(p => p.label === newLabel);
+        if (preference) {
+          user.keyword = preference.value;
+          localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(user));
+          // zustand store도 업데이트
+          setUser(user);
+        }
+      }
+    } catch (error) {
+      console.error("Failed to update user keyword in localStorage:", error);
+    }
   };
 
   // 매핑된 preference가 있으면 사용, 없으면 props로 받은 값 사용
