@@ -1,3 +1,5 @@
+import { useEffect, useRef } from "react";
+
 import { Box, Field, Text, TextInput, VStack } from "@vapor-ui/core";
 import { CheckCircleIcon } from "@vapor-ui/icons";
 
@@ -13,6 +15,14 @@ interface SignupFormFieldsProps {
 }
 
 const SignupFormFields = ({ step, formData, onUpdate }: SignupFormFieldsProps) => {
+  const nameInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (step === 1 && nameInputRef.current) {
+      nameInputRef.current.focus();
+    }
+  }, [step]);
+
   return (
     <section className="w-full">
       <VStack className="gap-4">
@@ -24,6 +34,8 @@ const SignupFormFields = ({ step, formData, onUpdate }: SignupFormFieldsProps) =
                   닉네임을 <br /> 입력해 주세요.
                 </Text>
                 <TextInput
+                  ref={nameInputRef}
+                  value={formData.name}
                   placeholder="닉네임"
                   onChange={e => onUpdate("name", e.target.value)}
                   className="px-v-300 rounded-v-300 h-v-600 border-v-normal"
