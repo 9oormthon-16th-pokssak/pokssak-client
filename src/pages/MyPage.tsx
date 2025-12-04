@@ -13,7 +13,6 @@ const MyPage = () => {
   const { user } = useAuth();
   const [likedCount, setLikedCount] = useState(0);
   const [visitedCount, setVisitedCount] = useState(0);
-  const [loading, setLoading] = useState(true);
   const [likedSpots, setLikedSpots] = useState<Spot[]>([]);
   const [visitedSpots, setVisitedSpots] = useState<Spot[]>([]);
   const [activeTab, setActiveTab] = useState("tab1");
@@ -21,7 +20,6 @@ const MyPage = () => {
   useEffect(() => {
     const fetchPlaces = async () => {
       try {
-        setLoading(true);
         const [likedResponse, visitedResponse] = await Promise.all([
           getLikedSpots(),
           getVisitedSpots(),
@@ -39,8 +37,6 @@ const MyPage = () => {
       } catch (error) {
         console.error("Failed to fetch places:", error);
         // 에러 발생 시 기본값 유지 (0)
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -48,7 +44,7 @@ const MyPage = () => {
   }, []);
 
   return (
-    <VStack>
+    <VStack className="p-v-300">
       <VStack>
         {/* 유저 취향 따라 이미지 변경 */}
         {user?.keyword && (
@@ -65,7 +61,7 @@ const MyPage = () => {
           </Text>
         )}
         {/* 좋아요 개수 && 가봤어요 개수 표시 - API*/}
-        {!loading && <UserStats likedCount={likedCount} visitedCount={visitedCount} />}
+        <UserStats likedCount={likedCount} visitedCount={visitedCount} />
       </VStack>
       <section>
         {/* 탭 컴포넌트 */}
