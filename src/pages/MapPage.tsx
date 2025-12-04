@@ -13,6 +13,28 @@ import { searchSpots } from "@/apis/map";
 import { PREFERENCES } from "@/constants/preferences";
 import { useGeoLocation } from "@/hooks/useGeoLocation";
 
+const USER_STORAGE_KEY = "user";
+
+// localStorage에서 user의 keyword를 가져와서 preference label로 변환
+const getInitialPreference = (): string => {
+  try {
+    const storedUser = localStorage.getItem(USER_STORAGE_KEY);
+    if (storedUser) {
+      const user = JSON.parse(storedUser);
+      if (user?.keyword) {
+        const preference = PREFERENCES.find(p => p.value === user.keyword);
+        if (preference) {
+          return preference.label;
+        }
+      }
+    }
+  } catch (error) {
+    console.error("Failed to parse user data from localStorage:", error);
+  }
+  // 기본값: 첫 번째 preference
+  return PREFERENCES[0].label;
+};
+
 // 범위 정보 계산 함수 (현재 위치 기준으로 반경 km의 사각형 범위 계산)
 const calculateBounds = (lat: number, lng: number, radiusKm: number = 5) => {
   // 1도 위도 ≈ 111km
@@ -44,8 +66,8 @@ export default function MapPage() {
   const [selectedPlace, setSelectedPlace] = useState<Place | undefined>(undefined);
   // 2. 상태: 모달 열림/닫힘 상태
   const [isModalOpen, setIsModalOpen] = useState(false);
-  // 3. 상태: 선택된 취향 정보
-  const [selectedPreference, setSelectedPreference] = useState<string>(PREFERENCES[0].label);
+  // 3. 상태: 선택된 취향 정보 (localStorage에서 초기값 가져오기)
+  const [selectedPreference, setSelectedPreference] = useState<string>(getInitialPreference());
   // 4. 상태: 장소 목록
   const [places, setPlaces] = useState<Place[]>([]);
   // 5. 상태: RefreshButton 표시 여부
