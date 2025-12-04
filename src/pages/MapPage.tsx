@@ -2,10 +2,10 @@ import { useState } from "react";
 
 import type { Place } from "@/types/kakaoMap";
 
-import CommonBottomModal from "@/components/CommonBottomModal";
 import KakaoMap from "@/components/KakaoMap";
 import BottomBar from "@/components/common/BottomBar";
 import Header from "@/components/common/Header";
+import PlaceBottomSheet from "@/components/map/PlaceBottomSheet";
 import RefreshButton from "@/components/map/RefreshButton";
 
 // 5개 장소 더미 데이터 (예시)
@@ -62,21 +62,13 @@ export default function MapPage() {
       <KakaoMap places={examplePlaces} onMarkerClick={handleMarkerClick} height="100vh" />
       <RefreshButton />
 
-      {/* 2. CommonBottomModal 컴포넌트 */}
-      <CommonBottomModal
-        isOpen={isModalOpen}
-        setIsOpen={setIsModalOpen}
-        title="장소 상세 정보"
-        selectedPlace={selectedPlace}
-      >
-        {/* 모달 내용 영역 (추가적인 상세 내용) */}
-        <div className="p-4 text-gray-600">
-          <p>
-            {selectedPlace?.name}에 대한 추가적인 상세 내용을 여기에 표시할 수 있습니다. 예를 들어
-            리뷰, 영업 시간, 사진 갤러리 등을 보여줄 수 있습니다.
-          </p>
-        </div>
-      </CommonBottomModal>
+      {selectedPlace && (
+        <PlaceBottomSheet
+          isOpen={isModalOpen}
+          setIsOpen={setIsModalOpen}
+          selectedPlace={selectedPlace}
+        />
+      )}
 
       <BottomBar />
     </div>

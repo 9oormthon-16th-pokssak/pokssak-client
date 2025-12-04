@@ -27,7 +27,7 @@ const BottomBar = () => {
   const DEFAULT_COLOR = "var(--vapor-color-gray-200)";
 
   return (
-    <div className="border-t-v-gray-100 fixed bottom-0 z-50 w-full border-t bg-white">
+    <div className="border-t-v-gray-100 fixed bottom-0 z-10 w-full border-t bg-white">
       <Flex
         justifyContent={"space-around"}
         alignItems={"center"}
