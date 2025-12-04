@@ -16,7 +16,7 @@ const BottomBar = () => {
 
   const [activeItem, setActiveItem] = useState("home");
 
-  // 🔥 현재 경로 변화 시 active 상태 자동 업데이트
+  // 현재 경로 변화 시 active 상태 자동 업데이트
   useEffect(() => {
     const current = navItems.find(item => item.path === location.pathname);
     if (current) {

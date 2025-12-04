@@ -1,7 +1,7 @@
 import { Box, Button, Tooltip } from "@vapor-ui/core";
 
 type BottomSheetButtonProps = {
-  status: 1 | 2 | 3;
+  status: 0 | 1 | 2 | 3;
 };
 
 type ColorPalette =
@@ -26,6 +26,15 @@ interface Config {
 const BottomSheetButton = ({ status }: BottomSheetButtonProps) => {
   const getConfig = (): Config => {
     switch (status) {
+      case 0:
+        return {
+          disabled: true,
+          text: "위치 정보를 불러오는 중...",
+          tooltip: "조금만 기다려주세요!",
+          color: "primary",
+          className: "w-full",
+        };
+
       case 1:
         return {
           disabled: true,
