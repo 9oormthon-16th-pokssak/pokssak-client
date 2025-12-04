@@ -41,7 +41,7 @@ const HomePage = () => {
     console.log(level);
 
     return () => clearTimeout(timer);
-  }, []); // dependency는 빈 배열
+  }, [isLoading]); // dependency는 빈 배열
 
   return (
     <>
