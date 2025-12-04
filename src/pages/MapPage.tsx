@@ -199,8 +199,6 @@ export default function MapPage() {
           selectedPlace={selectedPlace}
         />
       )}
-
-      <BottomBar />
     </div>
   );
 }
