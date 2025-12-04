@@ -5,6 +5,8 @@ import { Map, MapMarker, MapTypeControl } from "react-kakao-maps-sdk";
 
 import { useGeoLocation } from "@/hooks/useGeoLocation";
 
+import myLocationMarker from "@/assets/my-location-marker.svg";
+
 interface KakaoMapProps {
   width?: string;
   height?: string;
@@ -69,6 +71,18 @@ const KakaoMap = ({
       onBoundsChanged={handleBoundsChanged}
     >
       <MapTypeControl position={kakao.maps.ControlPosition.TOPRIGHT} />
+
+      {/* 현위치 마커 */}
+      {location && (
+        <MapMarker
+          position={{ lat: location.latitude, lng: location.longitude }}
+          image={{
+            src: myLocationMarker,
+            size: { width: 24, height: 24 },
+          }}
+          zIndex={1000}
+        />
+      )}
 
       {/* 장소 배열 기반 마커 표시 */}
       {places.map(place => (

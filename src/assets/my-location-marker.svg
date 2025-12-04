@@ -1,0 +1,13 @@
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .outer-circle { fill: rgba(65, 152, 242, 0.20); }
+    .inner-circle { 
+      fill: var(--vapor-color-blue-500, #3B82F6);
+      stroke: var(--vapor-color-white, #FFFFFF);
+      stroke-width: 2;
+    }
+  </style>
+  <circle cx="12" cy="12" r="10" class="outer-circle"/>
+  <circle cx="12" cy="12" r="6" class="inner-circle"/>
+</svg>
+
