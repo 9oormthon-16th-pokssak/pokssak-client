@@ -50,7 +50,11 @@ const HomePage = () => {
       ) : error ? (
         <div>위치 정보를 불러오는 중 오류가 발생했습니다.</div>
       ) : (
-        <div></div>
+        <div>
+          {location?.longitude}
+          <br />
+          {location?.latitude}
+        </div>
       )}
       <div id="map" className="map_wrap" ref={mapContainer}>
         {/* 지도타입 컨트롤 div */}
