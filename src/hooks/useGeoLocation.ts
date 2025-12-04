@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 
-interface ILocation {
+interface Location {
   latitude: number;
   longitude: number;
 }
 
 export const useGeoLocation = () => {
-  const [location, setLocation] = useState<ILocation | null>(null);
+  const [location, setLocation] = useState<Location | null>(null);
   const [error, setError] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -17,6 +17,8 @@ export const useGeoLocation = () => {
       setIsLoading(false);
       return;
     }
+
+    console.log("위치를 가져오는 중 ...");
 
     // 2. 성공 시 실행될 콜백
     const handleSuccess = (position: GeolocationPosition) => {
