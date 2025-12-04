@@ -4,6 +4,8 @@ import type { Place } from "@/types/kakaoMap";
 
 import CommonBottomModal from "@/components/CommonBottomModal";
 import KakaoMap from "@/components/KakaoMap";
+import BottomBar from "@/components/common/BottomBar";
+import Header from "@/components/common/Header";
 
 // 5개 장소 더미 데이터 (예시)
 const examplePlaces: Place[] = [
@@ -54,6 +56,7 @@ export default function HomePage() {
 
   return (
     <div>
+      <Header />
       {/* 1. KakaoMap 컴포넌트 */}
       <KakaoMap places={examplePlaces} onMarkerClick={handleMarkerClick} height="100vh" />
 
@@ -72,6 +75,8 @@ export default function HomePage() {
           </p>
         </div>
       </CommonBottomModal>
+
+      <BottomBar />
     </div>
   );
 }
