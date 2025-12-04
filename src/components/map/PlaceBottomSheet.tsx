@@ -10,6 +10,8 @@ import BottomSheetButton from "@/components/map/BottomSheetButton";
 import InfoCard from "@/components/map/InfoCard";
 
 import { getSpotDetail } from "@/apis/map";
+import { useGeoLocation } from "@/hooks/useGeoLocation";
+import { haversineDistanceMeters } from "@/utils/distance";
 
 interface Props {
   isOpen: boolean;
@@ -20,6 +22,7 @@ interface Props {
 const PlaceBottomSheet = ({ isOpen, setIsOpen, selectedPlace }: Props) => {
   const [place, setPlace] = useState<SpotDetailResponse | null>(null);
   const [loading, setLoading] = useState(false);
+  const { location, isLoading } = useGeoLocation();
 
   useEffect(() => {
     if (!selectedPlace?.id) {
@@ -41,9 +44,31 @@ const PlaceBottomSheet = ({ isOpen, setIsOpen, selectedPlace }: Props) => {
     fetchSpotDetail();
   }, [selectedPlace.id]);
 
-  // --------------------------
+  // 거리 계산 및 Status 결정 로직
+  let buttonStatus: 0 | 1 | 2 = 0; // 기본값은 타입1 (100m보다 멈)
+  const MAX_DISTANCE_M = 100; // 100 미터 임계값
+
+  // 장소 데이터가 있고, 사용자 위치를 성공적으로 가져왔을 때만 거리 계산 진행
+  if (place && location && !isLoading) {
+    const userLat = location.latitude;
+    const userLng = location.longitude;
+    const placeLat = place.location.latitude;
+    const placeLng = place.location.longitude;
+
+    // 현재 위치와 장소 간의 거리 계산
+    const distance = haversineDistanceMeters(userLat, userLng, placeLat, placeLng);
+    console.log(distance);
+    // 거리 판별
+    if (distance <= MAX_DISTANCE_M) {
+      // 100m 이내: 타입2
+      buttonStatus = 2;
+    } else {
+      // 100m 초과: 타입1
+      buttonStatus = 1;
+    }
+  }
+
   // 스켈레톤 로딩
-  // --------------------------
   if (loading) {
     return (
       <Sheet.Root open={isOpen} onOpenChange={setIsOpen} modal={true}>
@@ -74,9 +99,7 @@ const PlaceBottomSheet = ({ isOpen, setIsOpen, selectedPlace }: Props) => {
     );
   }
 
-  // --------------------------
   // 실제 데이터 화면
-  // --------------------------
   return (
     <Sheet.Root open={isOpen} onOpenChange={setIsOpen} modal={true}>
       <Sheet.Popup
@@ -142,7 +165,8 @@ const PlaceBottomSheet = ({ isOpen, setIsOpen, selectedPlace }: Props) => {
 
         <Sheet.Footer className={"p-0"}>
           <Box className={"px-v-150 pt-v-100 pb-v-175 w-full"}>
-            <BottomSheetButton status={2} />
+            {/* 거리 계산 결과에 따라 buttonStatus 값 전달 */}
+            <BottomSheetButton status={buttonStatus} />
           </Box>
         </Sheet.Footer>
       </Sheet.Popup>
