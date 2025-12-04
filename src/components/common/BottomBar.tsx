@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Button, Flex } from "@vapor-ui/core";
 import { HomeIcon, LocationIcon, UserIcon } from "@vapor-ui/icons";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const navItems = [
   { id: "home", Icon: HomeIcon, label: "홈", path: "/" },
@@ -12,8 +12,17 @@ const navItems = [
 
 const BottomBar = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [activeItem, setActiveItem] = useState("home");
+
+  // 🔥 현재 경로 변화 시 active 상태 자동 업데이트
+  useEffect(() => {
+    const current = navItems.find(item => item.path === location.pathname);
+    if (current) {
+      setActiveItem(current.id);
+    }
+  }, [location.pathname]);
 
   const handleItemClick = (itemId: string, path: string) => {
     setActiveItem(itemId);
