@@ -13,18 +13,18 @@ spec:
         app: frontend
     spec:
       containers:
-      - name: frontend
-        image: 837126493345.dkr.ecr.ap-northeast-2.amazonaws.com/goormthon-6/frontend:latest #FIXME:
-        ports:
-        - containerPort: 3000
-        volumeMounts:
-        - name: config-volume
-          mountPath: /app/config
-          readOnly: true
+        - name: frontend
+          image: 837126493345.dkr.ecr.ap-northeast-2.amazonaws.com/goormthon-6/frontend:latest #FIXME:
+          ports:
+            - containerPort: 5173
+          volumeMounts:
+            - name: config-volume
+              mountPath: /app/config
+              readOnly: true
       volumes:
-      - name: config-volume
-        configMap:
-          name: frontend-config
+        - name: config-volume
+          configMap:
+            name: frontend-config
 ---
 apiVersion: v1
 kind: Service
@@ -34,5 +34,5 @@ spec:
   selector:
     app: frontend
   ports:
-  - port: 80
-    targetPort: 3000
+    - port: 80
+      targetPort: 5173
