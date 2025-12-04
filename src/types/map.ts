@@ -21,3 +21,17 @@ export interface Spot {
 export interface SearchSpotsResponse {
   list: Spot[];
 }
+
+export interface SpotDetailResponse {
+  id: number;
+  keyword: string;
+  name: string;
+  description: string;
+  location: SpotLocation;
+  mapLink: string;
+  tip: string;
+  tags: string[];
+  weight: number;
+  isLiked: boolean;
+  isVisited: boolean;
+}

@@ -1,4 +1,4 @@
-import type { SearchSpotsResponse } from "@/types/map";
+import type { SearchSpotsResponse, SpotDetailResponse } from "@/types/map";
 
 import apiClient, { type ApiResponse } from "./core";
 
@@ -27,5 +27,19 @@ export const searchSpots = async (
   const response = await apiClient.get<ApiResponse<SearchSpotsResponse>>(
     `/spots?${queryParams.toString()}`
   );
+  return response.data;
+};
+
+interface GetSpotDetailRequest {
+  spotId: number;
+}
+
+export const getSpotDetail = async (
+  params: GetSpotDetailRequest
+): Promise<ApiResponse<SpotDetailResponse>> => {
+  const { spotId } = params;
+
+  const response = await apiClient.get<ApiResponse<SpotDetailResponse>>(`/spots/${spotId}`);
+
   return response.data;
 };
