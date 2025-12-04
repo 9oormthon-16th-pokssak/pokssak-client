@@ -148,7 +148,9 @@ const MyPage = () => {
                       className="h-[16px] w-[16px]"
                       alt={spot.keyword}
                     />
-                    <Badge shape="pill">{spot.keyword}</Badge>
+                    <Badge shape="square" className="bg-v-gray-50 px-v-100">
+                      <Text typography="subtitle1">{spot.keyword}</Text>
+                    </Badge>
                   </Table.Cell>
                 </Table.Row>
               ))}
