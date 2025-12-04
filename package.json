@@ -27,8 +27,10 @@
     "axios": "^1.13.2",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "react-kakao-maps-sdk": "^1.2.0",
     "react-router-dom": "^7.10.0",
     "tailwindcss": "^4.1.17",
+    "vaul": "^1.1.2",
     "zustand": "^5.0.9"
   },
   "devDependencies": {

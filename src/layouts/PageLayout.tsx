@@ -1,12 +1,11 @@
-import { VStack } from "@vapor-ui/core";
 import { Outlet } from "react-router-dom";
 
 export default function PageLayout() {
   return (
-    <main className="flex min-h-screen flex-col items-center">
-      <VStack>
+    <div className="flex h-fit min-h-screen w-full flex-col bg-[#fafafa]">
+      <div className="flex flex-1 flex-col">
         <Outlet />
-      </VStack>
-    </main>
+      </div>
+    </div>
   );
 }
