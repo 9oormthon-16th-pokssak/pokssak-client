@@ -13,7 +13,7 @@ const Header = ({ selectedPreference, onPreferenceChange }: HeaderProps) => {
   };
   return (
     <Flex
-      className="border-b-v-gray-100 h-v-700 fixed top-0 z-50 w-full items-center border-t bg-white"
+      className="border-b-v-gray-100 h-v-700 fixed top-0 z-50 w-full items-center border-b bg-white"
       paddingLeft={"$300"}
       paddingRight={"$300"}
     >

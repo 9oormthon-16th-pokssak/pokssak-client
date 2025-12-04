@@ -18,11 +18,10 @@ export const useGeoLocation = () => {
       return;
     }
 
-    console.log("위치를 가져오는 중 ...");
-
     // 2. 성공 시 실행될 콜백
     const handleSuccess = (position: GeolocationPosition) => {
       const { latitude, longitude } = position.coords;
+      console.log("위치를 가져오기 성공 ...", latitude, longitude);
       setLocation({
         latitude,
         longitude,

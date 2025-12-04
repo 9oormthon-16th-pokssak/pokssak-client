@@ -1,5 +1,7 @@
 import { HStack, Text, VStack } from "@vapor-ui/core";
 
+import BottomBar from "@/components/common/BottomBar";
+
 import 돌하르방 from "@/assets/돌하르방.webp";
 
 const HomePage = () => {
@@ -12,6 +14,7 @@ const HomePage = () => {
         </Text>
         <img src={돌하르방} />
       </HStack>
+      <BottomBar />
     </VStack>
   );
 };
