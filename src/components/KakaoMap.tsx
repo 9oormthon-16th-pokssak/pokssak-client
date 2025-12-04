@@ -5,6 +5,8 @@ import { Map, MapMarker, MapTypeControl } from "react-kakao-maps-sdk";
 
 import { useGeoLocation } from "@/hooks/useGeoLocation";
 
+import LocationIcon from "@/assets/LocationIcon.png";
+
 interface KakaoMapProps {
   width?: string;
   height?: string;
@@ -77,6 +79,7 @@ const KakaoMap = ({
           position={{ lat: place.lat, lng: place.lng }}
           title={place.name}
           onClick={() => onMarkerClick(place)}
+          image={{ src: LocationIcon, size: { width: 32, height: 32 } }}
         />
       ))}
     </Map>
