@@ -2,11 +2,10 @@ import { useState } from "react";
 
 import { Field, Flex, Select, Text } from "@vapor-ui/core";
 
-import icon_moon from "@/assets/icon_moon.svg";
+import { PREFERENCES } from "@/constants/preferences";
 
 const Header = () => {
-  const choices = ["조용한", "로컬스러운", "활동적인", "자연 친화적인", "핫플레이스"];
-  const [value, setValue] = useState<string>(choices[0]);
+  const [value, setValue] = useState<string>(PREFERENCES[0].label);
   const handleValueChange = (newValue: unknown) => {
     setValue(newValue as string);
   };
@@ -23,7 +22,7 @@ const Header = () => {
               {(value: string) =>
                 value ? (
                   <Flex className={"gap-v-100 items-center"}>
-                    <img src={icon_moon} />
+                    <img src={PREFERENCES.find(p => p.label === value)?.iconURL} />
                     <Text typography={"heading5"}>{value}</Text>
                   </Flex>
                 ) : (
@@ -38,9 +37,9 @@ const Header = () => {
             <Select.TriggerIconPrimitive />
           </Select.TriggerPrimitive>
           <Select.Popup>
-            {choices.map((item, i) => (
-              <Select.Item key={i} value={item}>
-                {item}
+            {PREFERENCES.map((item, i) => (
+              <Select.Item key={i} value={item.label}>
+                {item.label}
               </Select.Item>
             ))}
           </Select.Popup>
