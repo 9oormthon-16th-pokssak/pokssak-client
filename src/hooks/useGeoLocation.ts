@@ -57,7 +57,7 @@ export const useGeoLocation = () => {
           break;
         case error.TIMEOUT:
           // 3: 타임아웃
-          errorMessage = `위치 정보를 가져오는 요청이 시간 초과되었습니다. (설정 시간: 5000ms 초과)`;
+          errorMessage = `위치 정보를 가져오는 요청이 시간 초과되었습니다.`;
           break;
         default:
           // 알 수 없는 에러 (TS2339 해결)
