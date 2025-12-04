@@ -6,18 +6,32 @@ import UserKeywordHarubang from "@/components/common/UserKeywordHarubang";
 
 import { useAuth } from "@/hooks/useAuth";
 
+import backActive from "@/assets/backImage/back_activity.png";
+import backLocal from "@/assets/backImage/back_local.png";
+import backNature from "@/assets/backImage/back_nature.png";
 import backPeace from "@/assets/backImage/back_peace.png";
+import backPopular from "@/assets/backImage/back_populat.png";
 import card1 from "@/assets/cardImage/card1.png";
 import card2 from "@/assets/cardImage/card2.png";
 import card3 from "@/assets/cardImage/card3.png";
 
+const BACKGROUND_IMAGES: Record<string, string> = {
+  QUIET: backPeace,
+  LOCAL: backLocal,
+  ACTIVE: backActive,
+  NATURE: backNature,
+  POPULAR: backPopular,
+};
+
 const HomePage = () => {
   const { user } = useAuth();
+
+  const backgroundImage = user?.keyword ? BACKGROUND_IMAGES[user.keyword] || backPeace : backPeace;
 
   return (
     <Box className="relative min-h-screen w-full">
       <img
-        src={backPeace}
+        src={backgroundImage}
         alt="background"
         className="absolute top-0 right-0 h-full w-auto object-cover"
         style={{ zIndex: 0 }}
