@@ -1,11 +1,15 @@
-import type { Dispatch, SetStateAction } from "react";
+// --- PlaceBottomSheet.tsx ---
+import { type Dispatch, type SetStateAction, useEffect, useState } from "react";
 
 import type { Place } from "@/types/kakaoMap";
+import type { SpotDetailResponse } from "@/types/map";
 import { Badge, Box, Flex, HStack, Sheet, Text } from "@vapor-ui/core";
 import { HeartOutlineIcon, LocationOutlineIcon } from "@vapor-ui/icons";
 
 import BottomSheetButton from "@/components/map/BottomSheetButton";
 import InfoCard from "@/components/map/InfoCard";
+
+import { getSpotDetail } from "@/apis/map";
 
 interface Props {
   isOpen: boolean;
@@ -14,6 +18,65 @@ interface Props {
 }
 
 const PlaceBottomSheet = ({ isOpen, setIsOpen, selectedPlace }: Props) => {
+  const [place, setPlace] = useState<SpotDetailResponse | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!selectedPlace?.id) {
+      return;
+    }
+
+    const fetchSpotDetail = async () => {
+      try {
+        setLoading(true);
+        const res = await getSpotDetail({ spotId: Number(selectedPlace.id) });
+        setPlace(res.data);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSpotDetail();
+  }, [selectedPlace.id]);
+
+  // --------------------------
+  // 스켈레톤 로딩
+  // --------------------------
+  if (loading) {
+    return (
+      <Sheet.Root open={isOpen} onOpenChange={setIsOpen} modal={true}>
+        <Sheet.Popup
+          className={"h-fit"}
+          positionerElement={<Sheet.PositionerPrimitive side="bottom" />}
+        >
+          <Flex className={"p-v-300 gap-v-200 w-full"} flexDirection={"column"}>
+            {/* 제목 스켈레톤 */}
+            <div className="skeleton skeleton-text h-6 w-1/2" />
+
+            {/* 주소 */}
+            <div className="skeleton skeleton-text h-4 w-3/4" />
+
+            {/* 태그 3개 */}
+            <Flex flexDirection={"row"} gap={"12px"} className={"mt-v-150"}>
+              <div className="skeleton skeleton-tag" />
+              <div className="skeleton skeleton-tag" />
+              <div className="skeleton skeleton-tag" />
+            </Flex>
+
+            {/* 카드 두 개 */}
+            <div className="skeleton skeleton-card" />
+            <div className="skeleton skeleton-card" />
+          </Flex>
+        </Sheet.Popup>
+      </Sheet.Root>
+    );
+  }
+
+  // --------------------------
+  // 실제 데이터 화면
+  // --------------------------
   return (
     <Sheet.Root open={isOpen} onOpenChange={setIsOpen} modal={true}>
       <Sheet.Popup
@@ -28,60 +91,55 @@ const PlaceBottomSheet = ({ isOpen, setIsOpen, selectedPlace }: Props) => {
               alignItems={"center"}
               justifyContent={"space-between"}
             >
-              <Text typography={"heading4"}>{selectedPlace.name}</Text>
+              <Text typography={"heading4"}>{place?.name ?? selectedPlace.name}</Text>
               <HStack className={"gap-v-100"}>
-                <HeartOutlineIcon width={24} height={24} color={"var(--vapor-color-gray-600)"} />
-                <LocationOutlineIcon width={24} height={24} color={"var(--vapor-color-gray-600)"} />
+                <HeartOutlineIcon
+                  width={24}
+                  height={24}
+                  color={"var(--vapor-color-gray-600)"}
+                  className={"cursor-pointer"}
+                />
+                <LocationOutlineIcon
+                  width={24}
+                  height={24}
+                  color={"var(--vapor-color-gray-600)"}
+                  className={"cursor-pointer"}
+                  onClick={() => {
+                    window.open(place?.mapLink, "_blank");
+                  }}
+                />
               </HStack>
             </Flex>
           </Sheet.Title>
         </Sheet.Header>
+
         <Sheet.Body className={"pb-v-250 p-0"}>
           <Flex className={"gap-v-150 w-full"} flexDirection={"column"}>
             <Flex flexDirection={"column"} gap={"4px"} className={"px-v-300 w-full"}>
-              <Text typography={"body1"}>{selectedPlace.address}</Text>
+              <Text typography={"body1"}>{place?.location.address ?? selectedPlace.address}</Text>
+
               <Flex gap={"$100"}>
-                <Badge
-                  colorPalette={"primary"}
-                  size={"md"}
-                  shape={"square"}
-                  className={"px-v-100"}
-                  color={"var(--vapor-color-blue-300)"}
-                  backgroundColor={"var(--vapor-color-blue-050)"}
-                >
-                  #온종일 햇빛존
-                </Badge>
-                <Badge
-                  colorPalette={"primary"}
-                  size={"md"}
-                  shape={"square"}
-                  className={"px-v-100"}
-                  color={"var(--vapor-color-blue-300)"}
-                  backgroundColor={"var(--vapor-color-blue-050)"}
-                >
-                  #미디어아트
-                </Badge>
-                <Badge
-                  colorPalette={"primary"}
-                  size={"md"}
-                  shape={"square"}
-                  className={"px-v-100"}
-                  color={"var(--vapor-color-blue-300)"}
-                  backgroundColor={"var(--vapor-color-blue-050)"}
-                >
-                  #아이와 함께
-                </Badge>
+                {place?.tags?.map((tag, index) => (
+                  <Badge
+                    key={index}
+                    colorPalette={"primary"}
+                    size={"md"}
+                    shape={"square"}
+                    className={"px-v-100"}
+                    color={"var(--vapor-color-blue-300)"}
+                    backgroundColor={"var(--vapor-color-blue-050)"}
+                  >
+                    #{tag}
+                  </Badge>
+                ))}
               </Flex>
             </Flex>
-            <InfoCard type={"AI"} text={"빛과 소리로 만들어낸 압도적인 몰입형 미디어아트 전시관"} />
-            <InfoCard
-              type={"TIP"}
-              text={
-                "전시 관람 후 '티바(Tea Bar)'에서 미디어아트와 함께 차를 마시는 체험도 인기입니다"
-              }
-            />
+
+            {place?.description && <InfoCard type={"AI"} text={place.description} />}
+            {place?.tip && <InfoCard type={"TIP"} text={place.tip} />}
           </Flex>
         </Sheet.Body>
+
         <Sheet.Footer className={"p-0"}>
           <Box className={"px-v-150 pt-v-100 pb-v-175 w-full"}>
             <BottomSheetButton status={2} />
