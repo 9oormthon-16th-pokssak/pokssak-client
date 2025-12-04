@@ -1,14 +1,17 @@
 import { useEffect, useState } from "react";
 
 import type { Spot } from "@/types/map";
-import { Badge, Table, Tabs, Text, VStack } from "@vapor-ui/core";
+import { Badge, Flex, Table, Tabs, Text, VStack } from "@vapor-ui/core";
 
 import UserKeywordHarubang from "@/components/common/UserKeywordHarubang";
 import UserKeywordImage from "@/components/common/UserKeywordImage";
-import UserStats from "@/components/common/UserStats";
+import { StatItem } from "@/components/common/UserStats";
 
 import { getLikedSpots, getVisitedSpots } from "@/apis/spots";
 import { useAuth } from "@/hooks/useAuth";
+
+import iconHeart from "@/assets/icon_heart.svg";
+import iconShoes from "@/assets/icon_shoes.svg";
 
 const MyPage = () => {
   const { user } = useAuth();
@@ -112,7 +115,10 @@ const MyPage = () => {
           </Text>
         )}
         {/* 좋아요 개수 && 가봤어요 개수 표시 - API*/}
-        <UserStats likedCount={likedCount} visitedCount={visitedCount} />
+        <Flex className="gap-v-500 pb-v-150 justify-center">
+          <StatItem icon={iconHeart} count={likedCount} label="가고싶은 곳" />
+          <StatItem icon={iconShoes} count={visitedCount} label="다녀온 곳" />
+        </Flex>
       </VStack>
       <section>
         {/* 탭 컴포넌트 */}

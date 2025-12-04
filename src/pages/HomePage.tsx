@@ -1,9 +1,13 @@
+import { useEffect, useState } from "react";
+
 import { Box, HStack, Text, VStack } from "@vapor-ui/core";
 
 import BottomBar from "@/components/common/BottomBar";
 import Carousel from "@/components/common/Carousel";
 import UserKeywordHarubang from "@/components/common/UserKeywordHarubang";
+import { StatItem } from "@/components/common/UserStats";
 
+import { getLikedSpots, getVisitedSpots } from "@/apis/spots";
 import { useAuth } from "@/hooks/useAuth";
 
 import backActive from "@/assets/backImage/back_activity.png";
@@ -14,6 +18,8 @@ import backPopular from "@/assets/backImage/back_populat.png";
 import card1 from "@/assets/cardImage/card1.png";
 import card2 from "@/assets/cardImage/card2.png";
 import card3 from "@/assets/cardImage/card3.png";
+import iconHeart from "@/assets/icon_heart.svg";
+import iconShoes from "@/assets/icon_shoes.svg";
 
 const BACKGROUND_IMAGES: Record<string, string> = {
   QUIET: backPeace,
@@ -25,8 +31,73 @@ const BACKGROUND_IMAGES: Record<string, string> = {
 
 const HomePage = () => {
   const { user } = useAuth();
+  const [likedCount, setLikedCount] = useState(0);
+  const [visitedCount, setVisitedCount] = useState(0);
 
   const backgroundImage = user?.keyword ? BACKGROUND_IMAGES[user.keyword] || backPeace : backPeace;
+
+  useEffect(() => {
+    const fetchPlaces = async () => {
+      try {
+        const [likedResponse, visitedResponse] = await Promise.all([
+          getLikedSpots(),
+          getVisitedSpots(),
+        ]);
+
+        // likedResponse 처리
+        if (likedResponse) {
+          if (Array.isArray(likedResponse)) {
+            setLikedCount(likedResponse.length);
+          } else if (likedResponse.success && likedResponse.data) {
+            const likedData = likedResponse.data;
+            if (Array.isArray(likedData)) {
+              setLikedCount(likedData.length);
+            } else if (likedData && typeof likedData === "object" && !Array.isArray(likedData)) {
+              const dataObj = likedData as Record<string, unknown>;
+              const spots = (
+                Array.isArray(dataObj.list)
+                  ? dataObj.list
+                  : Array.isArray(dataObj.spots)
+                    ? dataObj.spots
+                    : []
+              ) as unknown[];
+              setLikedCount(spots.length);
+            }
+          }
+        }
+
+        // visitedResponse 처리
+        if (visitedResponse) {
+          if (Array.isArray(visitedResponse)) {
+            setVisitedCount(visitedResponse.length);
+          } else if (visitedResponse.success && visitedResponse.data) {
+            const visitedData = visitedResponse.data;
+            if (Array.isArray(visitedData)) {
+              setVisitedCount(visitedData.length);
+            } else if (
+              visitedData &&
+              typeof visitedData === "object" &&
+              !Array.isArray(visitedData)
+            ) {
+              const dataObj = visitedData as Record<string, unknown>;
+              const spots = (
+                Array.isArray(dataObj.list)
+                  ? dataObj.list
+                  : Array.isArray(dataObj.spots)
+                    ? dataObj.spots
+                    : []
+              ) as unknown[];
+              setVisitedCount(spots.length);
+            }
+          }
+        }
+      } catch (error) {
+        console.error("Failed to fetch places:", error);
+      }
+    };
+
+    fetchPlaces();
+  }, []);
 
   return (
     <Box className="relative min-h-screen w-full">
@@ -69,9 +140,29 @@ const HomePage = () => {
           />
         </VStack>
         <VStack className="w-full">
-          <Text typography={"heading6"} className="pb-v-100 color-v-gray-800">
+          <Text typography={"heading6"} className="pb-v-100 color-v-gray-800 px-v-150">
             나의 여행 취향 지표
           </Text>
+          <Box className="gap-v-200 rounded-v-400 bg-v-gray-50 px-v-300 py-v-200 flex h-[56px] w-full">
+            <StatItem
+              icon={iconHeart}
+              count={likedCount}
+              direction="horizontal"
+              className="gap-v-100 flex-1 items-center justify-center"
+              iconClassName="h-[32px] w-[32px]"
+              textClassName=""
+              typography="heading6"
+            />
+            <StatItem
+              icon={iconShoes}
+              count={visitedCount}
+              direction="horizontal"
+              className="gap-v-100 flex-1 items-center justify-center"
+              iconClassName="h-[32px] w-[32px]"
+              textClassName=""
+              typography="heading6"
+            />
+          </Box>
         </VStack>
         <BottomBar />
       </VStack>
