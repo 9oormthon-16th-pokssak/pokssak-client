@@ -92,7 +92,7 @@ const PlaceBottomSheet = ({ isOpen, setIsOpen, selectedPlace }: Props) => {
 
     // 현재 위치와 장소 간의 거리
     const distance = haversineDistanceMeters(userLat, userLng, placeLat, placeLng);
-    console.log(distance);
+    // console.log(distance);
 
     // 거리 판별
     if (distance <= MAX_DISTANCE_M) {
