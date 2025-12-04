@@ -2,7 +2,7 @@ import { create } from "zustand";
 
 interface User {
   name?: string;
-  email?: string;
+  keyword?: string;
   // TODO: 서버에서 받을 추가 필드들
 }
 
@@ -14,9 +14,25 @@ interface AuthState {
 
 const USER_STORAGE_KEY = "user";
 
+// localStorage에서 유저 정보 복원
+const getInitialUser = (): User | null => {
+  try {
+    const storedUser = localStorage.getItem(USER_STORAGE_KEY);
+    if (storedUser) {
+      return JSON.parse(storedUser);
+    }
+  } catch (error) {
+    console.error("Failed to parse user data from localStorage:", error);
+    localStorage.removeItem(USER_STORAGE_KEY);
+  }
+  return null;
+};
+
+const initialUser = getInitialUser();
+
 export const useAuthStore = create<AuthState>(set => ({
-  user: null,
-  isAuthenticated: false,
+  user: initialUser,
+  isAuthenticated: initialUser !== null,
   setUser: newUser => {
     if (newUser) {
       localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(newUser));

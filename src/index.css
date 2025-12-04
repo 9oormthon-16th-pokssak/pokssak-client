@@ -4,3 +4,14 @@
 /* 2. Tailwind CSS 연결 */
 @import "tailwindcss/theme.css" layer(tw-theme);
 @import "tailwindcss/utilities.css" layer(tw-utilities);
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  max-width: 375px;
+  margin: 0 auto;
+}
