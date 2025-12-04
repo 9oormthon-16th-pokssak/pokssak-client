@@ -6,9 +6,15 @@ interface CarouselProps {
   items: Array<{ id: string | number; image: string; alt?: string }>;
   autoPlayInterval?: number;
   className?: string;
+  aspectRatio?: number; // 예: 16/9 = 1.778, 4/3 = 1.333, 기본값은 16/9
 }
 
-const Carousel = ({ items, autoPlayInterval = 2000, className = "" }: CarouselProps) => {
+const Carousel = ({
+  items,
+  autoPlayInterval = 2000,
+  className = "",
+  aspectRatio = 16 / 9,
+}: CarouselProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
@@ -130,7 +136,7 @@ const Carousel = ({ items, autoPlayInterval = 2000, className = "" }: CarouselPr
       {/* 캐러셀 컨테이너 */}
       <Box
         ref={carouselRef}
-        className="relative w-full"
+        className="relative overflow-hidden"
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
@@ -150,12 +156,18 @@ const Carousel = ({ items, autoPlayInterval = 2000, className = "" }: CarouselPr
         >
           {items.map(item => (
             <Box key={item.id} className="min-w-full flex-shrink-0">
-              <img
-                src={item.image}
-                alt={item.alt || `Carousel item ${item.id}`}
-                className="h-auto w-full object-cover"
-                draggable={false}
-              />
+              <div
+                className="rounded-v-400 relative h-0 w-full overflow-hidden"
+                style={{ paddingBottom: `${(1 / aspectRatio) * 100}%` }}
+              >
+                <img
+                  src={item.image}
+                  alt={item.alt || `Carousel item ${item.id}`}
+                  className="rounded-v-400 absolute top-0 left-0 h-full w-full overflow-hidden object-cover"
+                  draggable={false}
+                  loading="lazy"
+                />
+              </div>
             </Box>
           ))}
         </Box>

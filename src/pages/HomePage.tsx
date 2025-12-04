@@ -118,7 +118,7 @@ const HomePage = () => {
           ) : null}
         </HStack>
         <VStack className="w-full">
-          <Text typography={"heading6"} className="pb-v-100 color-v-gray-800">
+          <Text typography={"heading6"} className="pb-v-100 color-v-gray-800 font-bold">
             오늘의 제주 큐레이션
           </Text>
           <Carousel
@@ -139,8 +139,8 @@ const HomePage = () => {
             autoPlayInterval={2000}
           />
         </VStack>
-        <VStack className="w-full">
-          <Text typography={"heading6"} className="pb-v-100 color-v-gray-800 px-v-150">
+        <VStack className="mb-v-150 w-full">
+          <Text typography={"heading6"} className="pb-v-100 color-v-gray-800 font-bold">
             나의 여행 취향 지표
           </Text>
           <Box className="gap-v-200 rounded-v-400 bg-v-gray-50 px-v-300 py-v-200 flex h-[56px] w-full">
@@ -163,6 +163,11 @@ const HomePage = () => {
               typography="heading6"
             />
           </Box>
+        </VStack>
+        <VStack className="w-full">
+          <Text typography={"heading6"} className="pb-v-100 color-v-gray-800 font-bold">
+            지금, 내 주변 제주 스폿
+          </Text>
         </VStack>
         <BottomBar />
       </VStack>
