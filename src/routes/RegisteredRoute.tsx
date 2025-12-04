@@ -1,13 +1,13 @@
-import { Navigate, Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 
-import { useAuth } from "@/hooks/useAuth";
+// import { useAuth } from "@/hooks/useAuth";
 
 const RegisteredRoute = () => {
-  const { isAuthenticated } = useAuth();
-
-  if (!isAuthenticated) {
-    return <Navigate to="/signup" replace />;
-  }
+  // const { isAuthenticated } = useAuth();
+  //
+  // if (!isAuthenticated) {
+  //   return <Navigate to="/signup" replace />;
+  // }
 
   return <Outlet />;
 };

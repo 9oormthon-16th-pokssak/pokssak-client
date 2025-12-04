@@ -2,7 +2,7 @@ import PageLayout from "@/layouts/PageLayout";
 import { RegisteredRoute, UnauthenticatedRoute } from "@/routes";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-import { HomePage, MyPage, PlaceDetailPage, SignupPage } from "@/pages";
+import { HomePage, MapPage, MyPage, PlaceDetailPage, SignupPage } from "@/pages";
 
 import { AuthProvider } from "@/providers/AuthProvider";
 
@@ -20,7 +20,8 @@ function App() {
           <Route element={<RegisteredRoute />}>
             <Route element={<PageLayout />}>
               <Route path="/" element={<HomePage />} />
-              <Route path="/detail/:id" element={<PlaceDetailPage />} />
+              <Route path="/map" element={<MapPage />} />
+              <Route path="/map/detail/:id" element={<PlaceDetailPage />} />
               <Route path="/mypage" element={<MyPage />} />
             </Route>
           </Route>
