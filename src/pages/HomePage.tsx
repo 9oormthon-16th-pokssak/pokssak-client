@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
 
+import type { Spot } from "@/types/map";
 import { Box, HStack, Text, VStack } from "@vapor-ui/core";
 
 import BottomBar from "@/components/common/BottomBar";
 import Carousel from "@/components/common/Carousel";
+import RecommendedSpotList from "@/components/common/RecommendedSpotList";
 import UserKeywordHarubang from "@/components/common/UserKeywordHarubang";
 import { StatItem } from "@/components/common/UserStats";
 
-import { getLikedSpots, getVisitedSpots } from "@/apis/spots";
+import { getLikedSpots, getRecommendedSpots, getVisitedSpots } from "@/apis/spots";
 import { useAuth } from "@/hooks/useAuth";
 
 import backActive from "@/assets/backImage/back_activity.png";
@@ -33,15 +35,17 @@ const HomePage = () => {
   const { user } = useAuth();
   const [likedCount, setLikedCount] = useState(0);
   const [visitedCount, setVisitedCount] = useState(0);
+  const [recommendedSpots, setRecommendedSpots] = useState<Spot[]>([]);
 
   const backgroundImage = user?.keyword ? BACKGROUND_IMAGES[user.keyword] || backPeace : backPeace;
 
   useEffect(() => {
     const fetchPlaces = async () => {
       try {
-        const [likedResponse, visitedResponse] = await Promise.all([
+        const [likedResponse, visitedResponse, recommendedResponse] = await Promise.all([
           getLikedSpots(),
           getVisitedSpots(),
+          getRecommendedSpots(),
         ]);
 
         // likedResponse 처리
@@ -91,6 +95,21 @@ const HomePage = () => {
             }
           }
         }
+
+        // recommendedResponse 처리
+        if (recommendedResponse) {
+          if (recommendedResponse.success && recommendedResponse.data) {
+            const recommendedData = recommendedResponse.data;
+            if (
+              recommendedData &&
+              typeof recommendedData === "object" &&
+              "list" in recommendedData
+            ) {
+              const spots = Array.isArray(recommendedData.list) ? recommendedData.list : [];
+              setRecommendedSpots(spots);
+            }
+          }
+        }
       } catch (error) {
         console.error("Failed to fetch places:", error);
       }
@@ -100,7 +119,7 @@ const HomePage = () => {
   }, []);
 
   return (
-    <Box className="relative min-h-screen w-full">
+    <Box className="pb-v-600 relative min-h-screen w-full">
       <img
         src={backgroundImage}
         alt="background"
@@ -168,6 +187,7 @@ const HomePage = () => {
           <Text typography={"heading6"} className="pb-v-100 color-v-gray-800 font-bold">
             지금, 내 주변 제주 스폿
           </Text>
+          <RecommendedSpotList spots={recommendedSpots} />
         </VStack>
         <BottomBar />
       </VStack>
