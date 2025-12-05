@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
 import { Box, HStack } from "@vapor-ui/core";
+import { useNavigate } from "react-router-dom";
 
 interface CarouselProps {
   items: Array<{ id: string | number; image: string; alt?: string }>;
@@ -15,6 +16,8 @@ const Carousel = ({
   className = "",
   aspectRatio = 16 / 9,
 }: CarouselProps) => {
+  const navigate = useNavigate();
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
@@ -155,7 +158,13 @@ const Carousel = ({
           }}
         >
           {items.map(item => (
-            <Box key={item.id} className="min-w-full flex-shrink-0">
+            <Box
+              key={item.id}
+              className="min-w-full flex-shrink-0"
+              onClick={() => {
+                navigate(`/qlation/${item.id}`);
+              }}
+            >
               <div
                 className="rounded-v-400 relative h-0 w-full overflow-hidden"
                 style={{ paddingBottom: `${(1 / aspectRatio) * 100}%` }}

@@ -6,6 +6,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import SplashScreen from "@/components/common/SplashScreen";
 import { HomePage, MapPage, MyPage, PlaceDetailPage, SignupPage } from "@/pages";
+import QlationPage from "@/pages/QlationPage";
 
 import { AuthProvider } from "@/providers/AuthProvider";
 
@@ -36,6 +37,7 @@ function App() {
           <Route element={<RegisteredRoute />}>
             <Route element={<PageLayout />}>
               <Route path="/" element={<HomePage />} />
+              <Route path="/qlation/:id" element={<QlationPage />} />
               <Route path="/map" element={<MapPage />} />
               <Route path="/map/detail/:id" element={<PlaceDetailPage />} />
               <Route path="/mypage" element={<MyPage />} />

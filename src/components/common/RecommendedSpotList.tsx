@@ -39,7 +39,12 @@ const RecommendedSpotList = ({ spots }: RecommendedSpotListProps) => {
               </Text>
             </VStack>
             {spot.mapLink && (
-              <LocationIcon width={24} height={24} color="var(--vapor-color-blue-500)" />
+              <LocationIcon
+                width={24}
+                height={24}
+                color="var(--vapor-color-blue-500)"
+                className={"shrink-0"}
+              />
             )}
           </HStack>
         </Box>

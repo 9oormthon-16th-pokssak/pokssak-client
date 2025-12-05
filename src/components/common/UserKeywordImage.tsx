@@ -7,7 +7,7 @@ interface UserKeywordImageProps {
 }
 
 const UserKeywordImage = ({ keyword, className = "", alt }: UserKeywordImageProps) => {
-  const preference = PREFERENCES.find(pref => pref.value === keyword);
+  const preference = PREFERENCES.find(pref => pref.label === keyword);
 
   if (!preference) {
     return null;
