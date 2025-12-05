@@ -21,10 +21,10 @@ const QlationPage = () => {
     data = qlationData1;
   } else if (id === "2") {
     title = "제주 속 숨은\n로컬 맛집 3선";
-    data = qlationData2;
+    data = qlationData3;
   } else if (id === "3") {
     title = "제주에서 느낄 수 있는\n로컬 카페 10곳";
-    data = qlationData3;
+    data = qlationData2;
   }
 
   return (

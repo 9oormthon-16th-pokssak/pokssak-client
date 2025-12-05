@@ -103,6 +103,12 @@ const PlaceBottomSheet = ({ isOpen, setIsOpen, selectedPlace }: Props) => {
       buttonStatus = 1;
     }
   }
+  // InfoCard 렌더링을 위한 유효성 검사 함수 정의
+  const isValidText = (text: string | undefined | null) => {
+    // `null`이나 `undefined`가 아니고,
+    // 문자열로 변환했을 때 공백만 있는 경우도 제외하고, 길이가 0이 아닌 경우에만 true 반환
+    return text && text.trim().length > 0;
+  };
 
   // 스켈레톤 로딩
   if (loading) {
@@ -209,8 +215,11 @@ const PlaceBottomSheet = ({ isOpen, setIsOpen, selectedPlace }: Props) => {
               </Flex>
             </Flex>
 
-            {place?.description && <InfoCard type={"AI"} text={place.description} />}
-            {place?.tip && <InfoCard type={"TIP"} text={place.tip} />}
+            {/* 수정된 부분: isValidText 함수로 place.description의 유효성을 명시적으로 검사 */}
+            {isValidText(place?.description) && <InfoCard type={"AI"} text={place!.description} />}
+
+            {/* 수정된 부분: isValidText 함수로 place.tip의 유효성을 명시적으로 검사 */}
+            {isValidText(place?.tip) && <InfoCard type={"TIP"} text={place!.tip} />}
           </Flex>
         </Sheet.Body>
 
