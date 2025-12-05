@@ -77,7 +77,7 @@ const PlaceBottomSheet = ({ isOpen, setIsOpen, selectedPlace }: Props) => {
 
   // 버튼 상태 초기값
   let buttonStatus: 0 | 1 | 2 | 3 = 0;
-  const MAX_DISTANCE_M = 100;
+  const MAX_DISTANCE_M = 200;
 
   // 방문 여부 확인
   if (place?.isVisited) {
@@ -217,7 +217,7 @@ const PlaceBottomSheet = ({ isOpen, setIsOpen, selectedPlace }: Props) => {
         <Sheet.Footer className={"p-0"}>
           <Box className={"px-v-150 pt-v-100 pb-v-175 w-full"}>
             {/* 버튼 상태 전달 */}
-            <BottomSheetButton status={buttonStatus} />
+            <BottomSheetButton initialStatus={buttonStatus} spotId={place ? place?.id : -1} />
           </Box>
         </Sheet.Footer>
       </Sheet.Popup>

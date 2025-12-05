@@ -1,7 +1,12 @@
+import { useState } from "react";
+
 import { Box, Button, Tooltip } from "@vapor-ui/core";
 
+import { visitSpot } from "@/apis/map";
+
 type BottomSheetButtonProps = {
-  status: 0 | 1 | 2 | 3;
+  initialStatus: 0 | 1 | 2 | 3;
+  spotId: number;
 };
 
 type ColorPalette =
@@ -23,7 +28,10 @@ interface Config {
   opacity?: number;
 }
 
-const BottomSheetButton = ({ status }: BottomSheetButtonProps) => {
+const BottomSheetButton = ({ initialStatus, spotId }: BottomSheetButtonProps) => {
+  const [status, setStatus] = useState(initialStatus);
+  const [loading, setLoading] = useState(false);
+
   const getConfig = (): Config => {
     switch (status) {
       case 0:
@@ -46,8 +54,8 @@ const BottomSheetButton = ({ status }: BottomSheetButtonProps) => {
 
       case 2:
         return {
-          disabled: false,
-          text: "여기 왓수다!",
+          disabled: loading,
+          text: loading ? "처리 중..." : "여기 왓수다!",
           tooltip: "👏🏻 도착하셨네요! 지금 바로 쓸 수 있는 쿠폰받으세요",
           color: "primary",
           className: "w-full",
@@ -76,6 +84,20 @@ const BottomSheetButton = ({ status }: BottomSheetButtonProps) => {
 
   const config = getConfig();
 
+  const handleClick = async () => {
+    if (status === 2 && !loading) {
+      setLoading(true);
+      try {
+        await visitSpot({ spotId });
+        setStatus(3); // 성공하면 상태 3으로 변경
+      } catch (error) {
+        console.error("방문 API 호출 실패", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
   return (
     <Box className="relative w-full">
       <Tooltip.Root defaultOpen={true} open={true}>
@@ -88,6 +110,7 @@ const BottomSheetButton = ({ status }: BottomSheetButtonProps) => {
               className={config.className}
               style={config.style}
               opacity={config.opacity}
+              onClick={handleClick}
             >
               {config.text}
             </Button>
